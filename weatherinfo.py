@@ -21,7 +21,7 @@ class Weatherinfo(BotPlugin):
             if aliases.get(use_location):
                 use_location = aliases[args]
             weather = Yr(location_name=use_location)
-            temperature = weather.now()[7]
+            temperature = weather.now()
             return f"Weather for {weather.location_name}: {temperature}"
 
 
