@@ -37,8 +37,8 @@ class Weatherinfo(BotPlugin):
         """(!place_alias) returns aliases that've been defined for places
         (!place_alias Brasil/Bahia/Ilhéus ilheus) saves "ilheus" as an alias for the longer place name
         """
-        aliases = dict()
-        self['WEATHER_PLACE_ALIASES'] = aliases
+        # aliases = dict()
+        # self['WEATHER_PLACE_ALIASES'] = aliases
 
         if len(args) == 0:
             fullname = None
