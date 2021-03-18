@@ -13,12 +13,12 @@ class Weatherinfo(BotPlugin):
     def weather(self, msg, args):
         """(!weather berlin) grab weather information for cities, regions, or alias names thereof
         """
-        use_location = args
+        use_location = args[0]
         aliases = dict()
         self['WEATHER_PLACE_ALIASES'] = aliases
 
         with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
-            if aliases.get(args):
+            if aliases.get(use_location):
                 use_location = aliases[args]
             weather = Yr(location_name=use_location)
             temperature = weather.now()[7]
