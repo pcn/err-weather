@@ -14,6 +14,8 @@ class Weatherinfo(BotPlugin):
     def weather(self, msg, args):
         """(!weather berlin) grab weather information for cities, regions, or alias names thereof
         """
+        def ctof(celc):
+            return (celc * 1.8) + 32
         use_location = args[0]
         aliases = dict()
         self['WEATHER_PLACE_ALIASES'] = aliases
@@ -23,8 +25,8 @@ class Weatherinfo(BotPlugin):
                 if aliases.get(use_location):
                     use_location = aliases[args]
                 weather = Yr(location_name=use_location)
-                temperature = weather.now()
-                return f"Weather for {weather.location_name}: {temperature}"
+                temp = weather.now()['temperature']['@value']
+                return f"Weather for {weather.location_name}: {temp} C (or {ctof(temp)} F if you've got your shit together like Liberia or Burma)"
             except error.HTTPError as e:
                 self.log.error(f"Got an error trying to access the {str(e)}")
                 return f"Couldn't get the weather for {args}"
