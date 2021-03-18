@@ -15,7 +15,7 @@ class Weatherinfo(BotPlugin):
         """(!weather berlin) grab weather information for cities, regions, or alias names thereof
         """
         def ctof(celc):
-            return (celc * 1.8) + 32
+            return (float(celc) * 1.8) + 32.0
         use_location = args[0]
         aliases = dict()
         self['WEATHER_PLACE_ALIASES'] = aliases
