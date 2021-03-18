@@ -32,7 +32,7 @@ class Weatherinfo(BotPlugin):
                 return f"Couldn't get the weather for {args}"
 
 
-    @botcmd(split_args_with=' ')
+    @botcmd(split_args_with=None)
     def place_alias(self, msg, args):
         """(!place_alias) returns aliases that've been defined for places
         (!place_alias Brasil/Bahia/Ilhéus ilheus) saves "ilheus" as an alias for the longer place name
