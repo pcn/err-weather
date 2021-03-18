@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from errbot import BotPlugin, botcmd
-import telnetlib
+from yr.libyr import Yr
 
 
 class Weatherinfo(BotPlugin):
@@ -11,17 +11,54 @@ class Weatherinfo(BotPlugin):
 
     @botcmd(split_args_with=None)
     def weather(self, msg, args):
-        """(!weather berlin) grab weather information for cities an regions
+        """(!weather berlin) grab weather information for cities, regions, or alias names thereof
         """
-        host = 'graph.no'
-        port = 79
-        timeout = 1
-        city = args[0]
+        use_location = args
+        aliases = dict()
+        self['WEATHER_PLACE_ALIASES'] = aliases
 
-        tn = telnetlib.Telnet(host, port, timeout)
-        tn.write(str('o:' + city + '\n').encode('ascii'))
-        ret = tn.read_all()
-        if b'yr.no is having technical problems' not in ret:
-            return ret.decode('utf-8')
+        with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
+            if aliases.get(args):
+                use_location = aliases[args]
+            weather = Yr(location_name=use_location)
+            temperature = weather.now()[7]
+            return f"Weather for {weather.location_name}: {temperature}"
+
+
+    @botcmd(split_args_with=' ')
+    def place_alias(self, msg, args):
+        """(!place_alias) returns aliases that've been defined for places
+        (!place_alias Brasil/Bahia/Ilhéus ilheus) saves "ilheus" as an alias for the longer place name
+        """
+        aliases = dict()
+        self['WEATHER_PLACE_ALIASES'] = aliases
+
+        if len(args) == 0:
+            fullname = None
+            alias = None
+        elif len(args) == 1:
+            fullname = None
+            alias = args[0]
+        elif len(args) == 2:
+            fullname = args[0]
+            alias = args[1]
         else:
-            return 'could not find city/region or something went wrong'
+            pass  # Handle the wrong number of args
+
+        with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
+            if fullname is None and alias is None:
+                return aliases
+            if alias and not fullname:
+                return aliases[alias]
+            if alias and fullname:
+                aliases[alias] = fullname
+                return aliases[alias]
+
+
+
+    @botcmd(split_args_with=' ')
+    def delete_place_alias(self, alias, fullname=None):
+        """(!delete_place_alias ilheus) delete any aliases associated with the short name "ilheus"
+        (!delete_place_alias ilheus USA/New_York/New_York) - deletes the alias for ilheus associated with USA/New_York/New_York if it exists"
+        """
+        pass
