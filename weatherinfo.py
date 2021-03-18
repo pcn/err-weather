@@ -2,6 +2,7 @@
 
 from errbot import BotPlugin, botcmd
 from yr.libyr import Yr
+from urllib import error
 
 
 class Weatherinfo(BotPlugin):
@@ -20,9 +21,12 @@ class Weatherinfo(BotPlugin):
         with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
             if aliases.get(use_location):
                 use_location = aliases[args]
-            weather = Yr(location_name=use_location)
-            temperature = weather.now()
-            return f"Weather for {weather.location_name}: {temperature}"
+            try:
+                weather = Yr(location_name=use_location)
+                temperature = weather.now()
+                return f"Weather for {weather.location_name}: {temperature}"
+            except error.HTTPError:
+                return f"Got an error trying to access the api. I have no idea how to log yet, so my best guess is that I couldn't look up the place name"
 
 
     @botcmd(split_args_with=' ')
@@ -47,7 +51,7 @@ class Weatherinfo(BotPlugin):
 
         with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
             if fullname is None and alias is None:
-                return aliases
+                return aliases!wea
             if alias and not fullname:
                 return aliases[alias]
             if alias and fullname:
