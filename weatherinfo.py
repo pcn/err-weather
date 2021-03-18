@@ -56,7 +56,7 @@ class Weatherinfo(BotPlugin):
             if fullname is None and alias is None:
                 return aliases
             if alias and not fullname:
-                return aliases[alias]
+                return aliases.get(alias, "I couldn't find the fullname for {alias}")
             if alias and fullname:
                 aliases[alias] = fullname
                 return aliases[alias]
