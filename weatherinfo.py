@@ -52,7 +52,7 @@ class Weatherinfo(BotPlugin):
 
         with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
             if fullname is None and alias is None:
-                return aliases!wea
+                return aliases
             if alias and not fullname:
                 return aliases[alias]
             if alias and fullname:
