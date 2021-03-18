@@ -23,7 +23,10 @@ class Weatherinfo(BotPlugin):
         with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
             try:
                 if aliases.get(use_location):
+                    self.log.debug(f"{use_location} found as an alias to {aliases[use_location]}")
                     use_location = aliases[args]
+                else:
+                    self.log.debug(f"{use_location} wasn't found in aliases")
                 weather = Yr(location_name=use_location)
                 temp = weather.now()['temperature']['@value']
                 return f"Weather for {weather.location_name}: {temp} C (or {ctof(temp)} F if you've got your shit together like Liberia or Burma)"
