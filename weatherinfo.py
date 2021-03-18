@@ -24,7 +24,7 @@ class Weatherinfo(BotPlugin):
             try:
                 if aliases.get(use_location):
                     self.log.debug(f"{use_location} found as an alias to {aliases[use_location]}")
-                    use_location = aliases[args]
+                    use_location = aliases[use_location]
                 else:
                     self.log.debug(f"{use_location} wasn't found in aliases")
                 weather = Yr(location_name=use_location)
@@ -32,7 +32,7 @@ class Weatherinfo(BotPlugin):
                 return f"Weather for {weather.location_name}: {temp} C (or {ctof(temp)} F if you've got your shit together like Liberia or Burma)"
             except error.HTTPError as e:
                 self.log.error(f"Got an error trying to access the {str(e)}")
-                return f"Couldn't get the weather for {args}"
+                return f"Couldn't get the weather for {use_location}"
 
 
     @botcmd(split_args_with=None)
