@@ -19,14 +19,15 @@ class Weatherinfo(BotPlugin):
         self['WEATHER_PLACE_ALIASES'] = aliases
 
         with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
-            if aliases.get(use_location):
-                use_location = aliases[args]
             try:
+                if aliases.get(use_location):
+                    use_location = aliases[args]
                 weather = Yr(location_name=use_location)
                 temperature = weather.now()
                 return f"Weather for {weather.location_name}: {temperature}"
-            except error.HTTPError:
-                return f"Got an error trying to access the api. I have no idea how to log yet, so my best guess is that I couldn't look up the place name"
+            except error.HTTPError as e:
+                self.log.error(f"Got an error trying to access the {str(e)}")
+                return f"Couldn't get the weather for {args}"
 
 
     @botcmd(split_args_with=' ')
