@@ -80,6 +80,15 @@ class Weatherinfo(BotPlugin):
         geoloc = geonames.GeoNames(
             auth_user, user_agent=USER_AGENT).geocode(
                 location)
+        headers = {
+            'content-type': 'application/json; charset=UTF-8',
+            'user-agent': USER_AGENT
+        }
+        params = {
+            'lat': geoloc.latitude,
+            'lon': geoloc.longitude
+        }
+        r = requests.get('https://api.met.no/weatherapi/locationforecast/2.0/compact.json?', headers=headers, params=params)
         return f"The location is {geoloc}, lat: {geoloc.latitude} lon: {geoloc.longitude}"
 
     @botcmd(split_args_with=None)
