@@ -80,7 +80,7 @@ class Weatherinfo(BotPlugin):
         geoloc = geonames.GeoNames(
             auth_user, user_agent=USER_AGENT).geocode(
                 location)
-        return f"The location is {geoloc}, lat: {geoloc.lat} lon: {geoloc.lon}"
+        return f"The location is {geoloc}, lat: {geoloc.latitude} lon: {geoloc.longitude}"
 
     @botcmd(split_args_with=None)
     def weather(self, msg, args):
