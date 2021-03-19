@@ -3,19 +3,52 @@
 from errbot import BotPlugin, botcmd
 from yr.libyr import Yr
 from urllib import error
+import json
+import requests
+import geopy
+
+def ctof(celc):
+    """Convert celcius to farenheit"""
+    return (float(celc) * 1.8) + 32.0
 
 
 class Weatherinfo(BotPlugin):
     """grab short weather informations around the globe
+
+    TODO: set up the WEATHER_PLACE_ALIASES to be initialized if it's empty, I think?
     """
+
+    @botcmd(aplit_args_with=None)
+    def geo_auth(self, msg, args):
+        """
+        (!geo_auth geonames <username>) provide the username that is authorized to use the geonames API
+        """
+        try:
+            with self.mutable('WEATHER_AUTH_TOKENS') as auth_tokens:
+                if args[0] == 'geonames':
+                    auth_tokens['geonames']
+        except Exception as e:
+            self.log.warning(f"Tried to get the WEATHER_AUTH_TOKENS and failed with {str(e)}")
+
+
+    @botcmd(split_args_with=None)
+    def new_weather(self, msg, args):
+        use_location = args[0]
+        with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
+            try:
+                if aliases.get(use_location):
+                    self.log.debug(f"{use_location} found as an alias to {aliases[use_location]}")
+                    use_location = aliases[use_location]
+                else:
+                    self.log.debug(f"{use_location} wasn't found in aliases")
+
+
 
 
     @botcmd(split_args_with=None)
     def weather(self, msg, args):
         """(!weather berlin) grab weather information for cities, regions, or alias names thereof
         """
-        def ctof(celc):
-            return (float(celc) * 1.8) + 32.0
         use_location = args[0]
         # aliases = dict()
         # self['WEATHER_PLACE_ALIASES'] = aliases
