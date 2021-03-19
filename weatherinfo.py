@@ -21,7 +21,9 @@ class Weatherinfo(BotPlugin):
         """Conditinonally initialize an empty
         container for persistence, but only if it
         is not currently bound"""
-        if not self.__dict__.get(key):
+        self.log.info(f"Checking to see if {key} is available")
+        if not self.get(key):
+            self.log.info(f"Initializing {key} is available")
             self[key] = empty
 
 
