@@ -23,6 +23,7 @@ class Weatherinfo(BotPlugin):
         """
         (!geo_auth geonames <username>) provide the username that is authorized to use the geonames API
         """
+        self.log.warning(f"Got these args: {msg} {args}")
         try:
             with self.mutable('WEATHER_AUTH_TOKENS') as auth_tokens:
                 if args[0] == 'geonames':
