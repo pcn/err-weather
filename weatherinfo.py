@@ -44,6 +44,8 @@ class Weatherinfo(BotPlugin):
                     use_location = aliases[use_location]
                 else:
                     self.log.debug(f"{use_location} wasn't found in aliases")
+            except Exception as foo:
+                self.log.warning("I failed")
 
 
     @botcmd(split_args_with=None)
