@@ -90,7 +90,10 @@ class Weatherinfo(BotPlugin):
         }
         rdata = requests.get('https://api.met.no/weatherapi/locationforecast/2.0/compact.json?', headers=headers, params=params).json()
 
-        return f"The location is {geoloc}, lat: {geoloc.latitude} lon: {geoloc.longitude}, {rdata['properties']['timeseries'][0]}"
+        first_data=rdata['properties']['timeseries'][0]
+        air_temp_c = first_data['data']['instant']['details']['air_temperature']
+        next_hour = first_data['data']['next_1_hours']['summary']['symbol_code']
+        return f"For {geoloc} (lat: {geoloc.latitude}, lon: {geoloc.longitude}), for {first_data['time']} the forecast is: { air_temp_c }, next hour: { next_hour }"
 
     @botcmd(split_args_with=None)
     def weather(self, msg, args):
