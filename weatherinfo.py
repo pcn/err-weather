@@ -46,11 +46,35 @@ class Weatherinfo(BotPlugin):
             return f"I couldn't get {key} from the persistence layer!"
 
 
+    def weather_location(self, location_name):
+        with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
+            return aliases.get(location_name, location_name)
+
 
     @botcmd(split_args_with=None)
     def new_weather(self, msg, args):
+        if len(args) != 1:
+            return f"I break if you try to hold me wrong"
         use_location = args[0]
-        with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
+        alias_key = 'WEATHER_PLACE_ALIASES'
+        auth_key = 'WEATHER_AUTH_TOKENS'
+        geonames_url = 'http://api.geonames.org/search', params=
+        self.initialize_persistence(key, dict())
+        # XXX gotta put an index of these things somewhere
+        # so this isn't just random junk scattered around
+        location_data = None
+        with self.mutable(auth_key) as auth:
+            service = 'geonames'
+            params = {
+                'username': auth[service],
+                'q': use_location,
+                'type': 'json'
+            }
+            headers = {
+                'User-Agent': 'TheEarnzBot-weather-plugin'
+            }
+            r = requests.get(geonames_url, params=params, headers=headers)
+        with self.mutable(alias_key) as aliases:
             try:
                 if aliases.get(use_location):
                     self.log.debug(f"{use_location} found as an alias to {aliases[use_location]}")
