@@ -5,7 +5,11 @@ from yr.libyr import Yr
 from urllib import error
 import json
 import requests
-import geopy
+
+from geopy.geocoders import geonames
+
+
+USER_AGENT='ernies-y-archer-bot'
 
 def ctof(celc):
     """Convert celcius to farenheit"""
@@ -27,6 +31,18 @@ class Weatherinfo(BotPlugin):
             self[key] = empty
 
 
+    def weather_location(self, location_name):
+        """Lookup a location alias."""
+        with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
+            return aliases.get(location_name, location_name)
+
+
+    def auth_info(self, auth_name):
+        """Get the auth user that has been set by geo_auth()"""
+        with self.mutable('WEATHER_AUTH_TOKENS') as tokens:
+            return tokens.get(auth_name)
+
+
     @botcmd(split_args_with=None)
     def geo_auth(self, msg, args):
         """
@@ -46,11 +62,6 @@ class Weatherinfo(BotPlugin):
             return f"I couldn't get {key} from the persistence layer!"
 
 
-    def weather_location(self, location_name):
-        with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
-            return aliases.get(location_name, location_name)
-
-
     @botcmd(split_args_with=None)
     def new_weather(self, msg, args):
         if len(args) != 1:
@@ -58,32 +69,16 @@ class Weatherinfo(BotPlugin):
         use_location = args[0]
         alias_key = 'WEATHER_PLACE_ALIASES'
         auth_key = 'WEATHER_AUTH_TOKENS'
-        geonames_url = 'http://api.geonames.org/search', params=
+        weather_svc = 'geonames'
         self.initialize_persistence(key, dict())
         # XXX gotta put an index of these things somewhere
         # so this isn't just random junk scattered around
-        location_data = None
-        with self.mutable(auth_key) as auth:
-            service = 'geonames'
-            params = {
-                'username': auth[service],
-                'q': use_location,
-                'type': 'json'
-            }
-            headers = {
-                'User-Agent': 'TheEarnzBot-weather-plugin'
-            }
-            r = requests.get(geonames_url, params=params, headers=headers)
-        with self.mutable(alias_key) as aliases:
-            try:
-                if aliases.get(use_location):
-                    self.log.debug(f"{use_location} found as an alias to {aliases[use_location]}")
-                    use_location = aliases[use_location]
-                else:
-                    self.log.debug(f"{use_location} wasn't found in aliases")
-            except Exception as foo:
-                self.log.warning("I failed")
-
+        auth_user = auth_info(weather_svc)
+        location = self.weather_location(use_location)
+        geoloc = geonames.GeoNames(
+            auth_user, user_agent=USER_AGENT).geocode(
+                location)
+        return f"The location is {geoloc}"
 
     @botcmd(split_args_with=None)
     def weather(self, msg, args):
