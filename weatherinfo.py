@@ -22,7 +22,7 @@ class Weatherinfo(BotPlugin):
         container for persistence, but only if it
         is not currently bound"""
         if not self.__dict__.get(key):
-            obj[key] = empty
+            self.__dict__[key] = empty
 
 
     @botcmd(split_args_with=None)
