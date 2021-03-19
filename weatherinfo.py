@@ -26,7 +26,7 @@ class Weatherinfo(BotPlugin):
         try:
             with self.mutable('WEATHER_AUTH_TOKENS') as auth_tokens:
                 if args[0] == 'geonames':
-                    auth_tokens['geonames']
+                    auth_tokens['geonames'] = args[1]
         except Exception as e:
             self.log.warning(f"Tried to get the WEATHER_AUTH_TOKENS and failed with {str(e)}")
 
@@ -41,8 +41,6 @@ class Weatherinfo(BotPlugin):
                     use_location = aliases[use_location]
                 else:
                     self.log.debug(f"{use_location} wasn't found in aliases")
-
-
 
 
     @botcmd(split_args_with=None)
