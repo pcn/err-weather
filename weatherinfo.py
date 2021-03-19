@@ -27,6 +27,8 @@ class Weatherinfo(BotPlugin):
             with self.mutable('WEATHER_AUTH_TOKENS') as auth_tokens:
                 if args[0] == 'geonames':
                     auth_tokens['geonames'] = args[1]
+
+                return auth_tokens
         except Exception as e:
             self.log.warning(f"Tried to get the WEATHER_AUTH_TOKENS and failed with {str(e)}")
 
