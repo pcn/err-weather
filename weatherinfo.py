@@ -17,21 +17,32 @@ class Weatherinfo(BotPlugin):
 
     TODO: set up the WEATHER_PLACE_ALIASES to be initialized if it's empty, I think?
     """
+    def initialize_persistence(self, key, empty):
+        """Conditinonally initialize an empty
+        container for persistence, but only if it
+        is not currently bound"""
+        if not self.__dict__.get(key):
+            obj[key] = empty
+
 
     @botcmd(split_args_with=None)
     def geo_auth(self, msg, args):
         """
         (!geo_auth geonames <username>) provide the username that is authorized to use the geonames API
         """
+        key = 'WEATHER_AUTH_TOKENS'
         self.log.warning(f"Got these args: {msg} {args}")
+        self.initialize_persistence(key, dict())
         try:
-            with self.mutable('WEATHER_AUTH_TOKENS') as auth_tokens:
+            with self.mutable(key) as auth_tokens:
                 if len(args) == 2:
                     if args[0] == 'geonames':
                         auth_tokens['geonames'] = args[1]
                 return auth_tokens
-        except Exception as e:
-            self.log.warning(f"Tried to get the WEATHER_AUTH_TOKENS and failed with {str(e)}")
+        except TypeError as e:
+            self.log.warning(f"Tried to get the WEATHER_AUTH_TOKENS and failed with {str(e)}, so I'm going to initialize it")
+            return f"I couldn't get {key} from the persistenc layer!"
+
 
 
     @botcmd(split_args_with=None)
