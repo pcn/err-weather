@@ -75,7 +75,7 @@ class Weatherinfo(BotPlugin):
         weather_svc = 'geonames'
         # XXX gotta put an index of these things somewhere
         # so this isn't just random junk scattered around
-        auth_user = auth_info(weather_svc)
+        auth_user = self.auth_info(weather_svc)
         location = self.weather_location(use_location)
         geoloc = geonames.GeoNames(
             auth_user, user_agent=USER_AGENT).geocode(
