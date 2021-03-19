@@ -1,1 +1,2 @@
 python-yr==1.4.7post2
+geopy

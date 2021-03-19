@@ -18,7 +18,7 @@ class Weatherinfo(BotPlugin):
     TODO: set up the WEATHER_PLACE_ALIASES to be initialized if it's empty, I think?
     """
 
-    @botcmd(aplit_args_with=None)
+    @botcmd(split_args_with=None)
     def geo_auth(self, msg, args):
         """
         (!geo_auth geonames <username>) provide the username that is authorized to use the geonames API
