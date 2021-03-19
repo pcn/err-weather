@@ -89,6 +89,7 @@ class Weatherinfo(BotPlugin):
             'lon': geoloc.longitude
         }
         r = requests.get('https://api.met.no/weatherapi/locationforecast/2.0/compact.json?', headers=headers, params=params)
+        self.log.info(r.content)
         return f"The location is {geoloc}, lat: {geoloc.latitude} lon: {geoloc.longitude}"
 
     @botcmd(split_args_with=None)
