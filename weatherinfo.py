@@ -73,7 +73,6 @@ class Weatherinfo(BotPlugin):
         alias_key = 'WEATHER_PLACE_ALIASES'
         auth_key = 'WEATHER_AUTH_TOKENS'
         weather_svc = 'geonames'
-        self.initialize_persistence(key, dict())
         # XXX gotta put an index of these things somewhere
         # so this isn't just random junk scattered around
         auth_user = auth_info(weather_svc)
