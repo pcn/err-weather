@@ -64,6 +64,9 @@ class Weatherinfo(BotPlugin):
 
     @botcmd(split_args_with=None)
     def new_weather(self, msg, args):
+        """
+        (!new_weather ilheus) return the weather for a location
+        """
         if len(args) != 1:
             return f"I break if you try to hold me wrong"
         use_location = args[0]
