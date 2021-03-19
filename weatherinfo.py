@@ -22,7 +22,7 @@ class Weatherinfo(BotPlugin):
         container for persistence, but only if it
         is not currently bound"""
         if not self.__dict__.get(key):
-            self.__dict__[key] = empty
+            self[key] = empty
 
 
     @botcmd(split_args_with=None)
@@ -41,7 +41,7 @@ class Weatherinfo(BotPlugin):
                 return auth_tokens
         except TypeError as e:
             self.log.warning(f"Tried to get the WEATHER_AUTH_TOKENS and failed with {str(e)}, so I'm going to initialize it")
-            return f"I couldn't get {key} from the persistenc layer!"
+            return f"I couldn't get {key} from the persistence layer!"
 
 
 
