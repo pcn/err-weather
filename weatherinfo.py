@@ -91,7 +91,7 @@ class Weatherinfo(BotPlugin):
     @botcmd(split_args_with=None)
     def myanmar_weather(self, msg, args):
         rdata, geoloc = self._weather(args)
-        first_data=rdata['properties']['timeseries'][0]
+        first_data = rdata['properties']['timeseries'][0]
         air_temp_f = ctof(first_data['data']['instant']['details']['air_temperature'])
         next_hour = first_data['data']['next_1_hours']['summary']['symbol_code']
         return f"{geoloc} (lat: {geoloc.latitude}, lon: {geoloc.longitude}), for {first_data['time']} the forecast is: { air_temp_f } F, next hour: { next_hour }"
@@ -102,33 +102,12 @@ class Weatherinfo(BotPlugin):
         """
         (!new_weather ilheus) return the weather for a location
         """
-        if len(args) != 1:
-            return f"I break if you try to hold me wrong"
-        use_location = args[0]
-        alias_key = 'WEATHER_PLACE_ALIASES'
-        auth_key = 'WEATHER_AUTH_TOKENS'
-        weather_svc = 'geonames'
-        # XXX gotta put an index of these things somewhere
-        # so this isn't just random junk scattered around
-        auth_user = self.auth_info(weather_svc)
-        location = self.weather_location(use_location)
-        geoloc = geonames.GeoNames(
-            auth_user, user_agent=USER_AGENT).geocode(
-                location)
-        headers = {
-            'content-type': 'application/json; charset=UTF-8',
-            'user-agent': USER_AGENT
-        }
-        params = {
-            'lat': geoloc.latitude,
-            'lon': geoloc.longitude
-        }
-        rdata = requests.get('https://api.met.no/weatherapi/locationforecast/2.0/compact.json?', headers=headers, params=params).json()
-
-        first_data=rdata['properties']['timeseries'][0]
+        rdata, geoloc = self._weather(args)
+        first_data = rdata['properties']['timeseries'][0]
         air_temp_c = first_data['data']['instant']['details']['air_temperature']
         next_hour = first_data['data']['next_1_hours']['summary']['symbol_code']
         return f"For {geoloc} (lat: {geoloc.latitude}, lon: {geoloc.longitude}), for {first_data['time']} the forecast is: { air_temp_c } C, next hour: { next_hour }"
+
 
     @botcmd(split_args_with=None)
     @botcmd(split_args_with=None)
