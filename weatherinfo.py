@@ -89,7 +89,7 @@ class Weatherinfo(BotPlugin):
         return rdata, geoloc
 
     @botcmd(split_args_with=None)
-    def myanmar_weather(self, msg, args):
+    def myanmar(self, msg, args):
         rdata, geoloc = self._weather(args)
         first_data = rdata['properties']['timeseries'][0]
         air_temp_f = ctof(first_data['data']['instant']['details']['air_temperature'])
