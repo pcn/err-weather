@@ -63,7 +63,7 @@ class Weatherinfo(BotPlugin):
 
 
     @botcmd(split_args_with=None)
-    def new_weather(self, msg, args):
+    def weather(self, msg, args):
         """
         (!new_weather ilheus) return the weather for a location
         """
@@ -96,28 +96,6 @@ class Weatherinfo(BotPlugin):
         return f"For {geoloc} (lat: {geoloc.latitude}, lon: {geoloc.longitude}), for {first_data['time']} the forecast is: { air_temp_c } C, next hour: { next_hour }"
 
     @botcmd(split_args_with=None)
-    def weather(self, msg, args):
-        """(!weather berlin) grab weather information for cities, regions, or alias names thereof
-        """
-        use_location = args[0]
-        # aliases = dict()
-        # self['WEATHER_PLACE_ALIASES'] = aliases
-
-        with self.mutable('WEATHER_PLACE_ALIASES') as aliases:
-            try:
-                if aliases.get(use_location):
-                    self.log.debug(f"{use_location} found as an alias to {aliases[use_location]}")
-                    use_location = aliases[use_location]
-                else:
-                    self.log.debug(f"{use_location} wasn't found in aliases")
-                weather = Yr(location_name=use_location)
-                temp = weather.now()['temperature']['@value']
-                return f"Weather for {weather.location_name}: {temp} C (or {ctof(temp)} F if you've got your shit together like Liberia or Burma)"
-            except error.HTTPError as e:
-                self.log.error(f"Got an error trying to access the {str(e)}")
-                return f"Couldn't get the weather for {use_location}"
-
-
     @botcmd(split_args_with=None)
     def place_alias(self, msg, args):
         """(!place_alias) returns aliases that've been defined for places

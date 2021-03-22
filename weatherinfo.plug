@@ -1,9 +1,9 @@
 [Core]
-module = weatherinfo
-name = weatherinfo
+module = weather_forecast
+name = weather_forecast
 
 [Documentation]
-description = displays short weather informations for given city
+description = displays short weather informations for given city, zip code etc.
 
 [Python]
 version = 3
