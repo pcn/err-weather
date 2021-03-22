@@ -11,8 +11,8 @@ from geopy.geocoders import geonames
 USER_AGENT='ernies-y-archer-bot'
 
 def ctof(celc):
-    """Convert celcius to farenheit"""
-    return (float(celc) * 1.8) + 32.0
+    """Convert celcius to farenheit, rounded to 1 decimal point"""
+    return round((float(celc) * 1.8) + 32.0, 1)
 
 
 class Weatherinfo(BotPlugin):
