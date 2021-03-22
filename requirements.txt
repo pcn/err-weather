@@ -1,2 +1,3 @@
-python-yr==1.4.7post2
+# python-yr==1.4.7post2
 geopy
+requests 

@@ -1,6 +1,6 @@
 [Core]
-module = weather_forecast
-name = weather_forecast
+module = weatherinfo
+name = weatherinfo
 
 [Documentation]
 description = displays short weather informations for given city, zip code etc.
