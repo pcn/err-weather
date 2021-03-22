@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 from errbot import BotPlugin, botcmd
-from yr.libyr import Yr
 from urllib import error
 import json
 import requests
